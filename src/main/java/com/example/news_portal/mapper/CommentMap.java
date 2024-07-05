@@ -5,7 +5,7 @@ import com.example.news_portal.dto.response.CommentListResponse;
 import com.example.news_portal.dto.response.CommentResponse;
 import com.example.news_portal.model.Comment;
 import com.example.news_portal.service.CommentService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentMap {
 
     private final CommentService commentService;

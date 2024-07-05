@@ -18,15 +18,3 @@ spring:
       connection-timeout: 10000
 server:
   port: 8081
-
-#    hibernate:
-#      connection:
-#        driver_class: org.postgresql.Driver
-#        url: jdbc:postgresql://localhost:5432/news_db
-#        username: postgres
-#        password: postgres
-#      hbm2ddl: validate
-#      show-sql: true
-#    hibernate:
-#      ddl-auto: validate #update   create-drop  create validate
-#    show-sql: true

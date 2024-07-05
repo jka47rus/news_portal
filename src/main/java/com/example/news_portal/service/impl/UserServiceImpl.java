@@ -1,11 +1,13 @@
 package com.example.news_portal.service.impl;
 
+import com.example.news_portal.dto.request.NewsFilter;
 import com.example.news_portal.exception.EntityNotFoundException;
 import com.example.news_portal.model.User;
 import com.example.news_portal.repository.UserRepository;
 import com.example.news_portal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -20,9 +22,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> findAll() {
-        List<User> users = userRepository.findAll();
-        return users;
+    public List<User> findAll(NewsFilter filter) {
+        return userRepository.findAll(PageRequest.of(filter.getPageNumber(), filter.getPageSize())).getContent();
+
     }
 
     @Override
@@ -50,31 +52,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existsByUsername(String username) {
-        if (userRepository.findByUsername(username).isEmpty()) return false;
-
-        return true;
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override
     public boolean existByEmail(String email) {
-        if (userRepository.findByEmail(email).isEmpty()) return false;
-        return true;
+        return userRepository.findByEmail(email).isPresent();
     }
-
-
-//    @Override
-//    public User findByUsername(String username) {
-//        return userRepository.findByUsername(username)
-//                .orElseThrow(() -> new EntityNotFoundException(MessageFormat
-//                        .format("User with username {0} not found!", username)));
-//    }
-//
-//    @Override
-//    public User findByEmail(String email) {
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new EntityNotFoundException(MessageFormat
-//                        .format("User with email {0} not found!", email)));
-//    }
-
 
 }

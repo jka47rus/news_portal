@@ -27,10 +27,8 @@ public class User {
     private List<Comment> comments = new ArrayList<>();
     @OneToMany
     private List<News> news = new ArrayList<>();
-    //    @ElementCollection(targetClass = RoleType.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private RoleType role;
-//    private Set<RoleType> roles = new HashSet<>();
 
     public void addComment(Comment comment) {
         comment.setUser(this);
@@ -41,8 +39,14 @@ public class User {
         oneNews.setAuthor(this);
         news.add(oneNews);
     }
-//    public void addRole(RoleType role) {
-//        getRoles().add(role);
-//
-//    }
+
+    public void deleteNews(News one) {
+        news.remove(one);
+    }
+
+    public void deleteComment(Comment one) {
+        comments.remove(one);
+    }
+
+
 }

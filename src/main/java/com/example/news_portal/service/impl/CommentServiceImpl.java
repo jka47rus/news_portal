@@ -47,6 +47,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteById(UUID id) {
+        Comment comment = commentRepository.findById(id).get();
+        User author = userService.findById(comment.getUser().getId());
+
+        author.deleteComment(comment);
+
         commentRepository.deleteById(id);
     }
 
@@ -55,10 +60,5 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MessageFormat
                 .format("Comment with Id {0} not found", id)));
     }
-
-//    @Override
-//    public boolean existByIdUserId(UUID id, UUID userId) {
-//        return commentRepository.existByIdUserId(id, userId);
-//    }
 
 }

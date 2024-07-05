@@ -5,7 +5,7 @@ import com.example.news_portal.dto.response.CategoryListResponse;
 import com.example.news_portal.dto.response.CategoryResponse;
 import com.example.news_portal.model.Category;
 import com.example.news_portal.service.CategoryService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryMap {
 
     private final CategoryService categoryService;

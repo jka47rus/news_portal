@@ -1,6 +1,7 @@
 package com.example.news_portal.controller;
 
 import com.example.news_portal.dto.request.CategoryRequest;
+import com.example.news_portal.dto.request.NewsFilter;
 import com.example.news_portal.dto.response.CategoryListResponse;
 import com.example.news_portal.dto.response.CategoryResponse;
 import com.example.news_portal.mapper.CategoryMap;
@@ -22,8 +23,8 @@ public class CategoryController {
     private final CategoryMap categoryMapper;
 
     @GetMapping
-    public ResponseEntity<CategoryListResponse> findAll() {
-        return ResponseEntity.ok(categoryMapper.categoryListToCategoryListResponse(categoryService.findAll()));
+    public ResponseEntity<CategoryListResponse> findAll(NewsFilter filter) {
+        return ResponseEntity.ok(categoryMapper.categoryListToCategoryListResponse(categoryService.findAll(filter)));
     }
 
     @PostMapping

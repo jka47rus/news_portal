@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsListResponse {
-    List<NewsResponse> newsList = new ArrayList<>();
+    List<BriefNewsResponse> newsList = new ArrayList<>();
 }

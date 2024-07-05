@@ -17,9 +17,4 @@ public interface CommentService {
 
     Comment findById(UUID id);
 
-
-//        Page<Comment> findAllByPostId(UUID postId, Pageable pageable);
-//    boolean existByIdUserId(UUID id, UUID userId);
-
-
 }

@@ -1,5 +1,6 @@
 package com.example.news_portal.controller;
 
+import com.example.news_portal.aop.Loggable;
 import com.example.news_portal.dto.request.CommentRequest;
 import com.example.news_portal.dto.response.CommentListResponse;
 import com.example.news_portal.dto.response.CommentResponse;
@@ -35,15 +36,19 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentResponse> updateComment(@RequestBody CommentRequest request,
-                                                         @PathVariable UUID id) {
+    @Loggable
+    public ResponseEntity<CommentResponse> updateComment(@RequestParam UUID userId,
+                                                         @PathVariable UUID id,
+                                                         @RequestBody CommentRequest request
+    ) {
         Comment comment = commentService.updateComment(commentMapper.requestToComment(id, request));
 
         return ResponseEntity.ok(commentMapper.commentToResponse(comment));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @Loggable
+    public ResponseEntity<Void> deleteComment(@RequestParam UUID userId, @PathVariable UUID id) {
         commentService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

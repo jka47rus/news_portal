@@ -1,11 +1,13 @@
 package com.example.news_portal.service.impl;
 
+import com.example.news_portal.dto.request.NewsFilter;
 import com.example.news_portal.exception.EntityNotFoundException;
 import com.example.news_portal.model.Category;
 import com.example.news_portal.repository.CategoryRepository;
 import com.example.news_portal.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -19,9 +21,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public List<Category> findAll() {
-        List<Category> categories = categoryRepository.findAll();
-        return categories;
+    public List<Category> findAll(NewsFilter filter) {
+        return categoryRepository.findAll(PageRequest.of(filter.getPageNumber(), filter.getPageSize())).getContent();
     }
 
     @Override
@@ -47,12 +48,5 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MessageFormat
                 .format("Category with ID {0} not found", id)));
     }
-
-
-//    @Override
-//    public Category findByName(String name) {
-//        return categoryRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(MessageFormat
-//                .format("Category with name {0} not found", name)));
-//    }
 
 }

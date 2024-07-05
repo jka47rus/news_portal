@@ -1,6 +1,7 @@
 package com.example.news_portal.mapper;
 
 import com.example.news_portal.dto.request.NewsRequest;
+import com.example.news_portal.dto.response.BriefNewsResponse;
 import com.example.news_portal.dto.response.CommentResponse;
 import com.example.news_portal.dto.response.NewsListResponse;
 import com.example.news_portal.dto.response.NewsResponse;
@@ -50,8 +51,8 @@ public class NewsMap {
     }
 
 
-    public List<NewsResponse> newsListToListResponse(List<News> news) {
-        return news.stream().map(this::newsToResponse).collect(Collectors.toList());
+    public List<BriefNewsResponse> newsListToListResponse(List<News> news) {
+        return news.stream().map(this::newsToBriefResponse).collect(Collectors.toList());
     }
 
     public NewsListResponse newsListToNewsListResponse(List<News> news) {
@@ -109,24 +110,24 @@ public class NewsMap {
         return commentResponse;
     }
 
-//    public BriefNewsResponse newsToBriefResponse(News news) {
-//        if (news == null) {
-//            return null;
-//        }
-//
-//        BriefNewsResponse briefNewsResponse = new BriefNewsResponse();
-//
-//        briefNewsResponse.setUsername(news.getAuthor().getUsername());
-//        briefNewsResponse.setId(news.getId());
-//        briefNewsResponse.setTitle(news.getTitle());
-//        briefNewsResponse.setDescription(news.getDescription());
-//        briefNewsResponse.setBody(news.getBody());
-//        briefNewsResponse.setCreatedAt(news.getCreatedAt());
-//        briefNewsResponse.setUpdatedAt(news.getUpdatedAt());
-//        briefNewsResponse.setCommentsCount(news.getComments().size()); // -> добавил
-//
-//        return briefNewsResponse;
-//    }
+    public BriefNewsResponse newsToBriefResponse(News news) {
+        if (news == null) {
+            return null;
+        }
+
+        BriefNewsResponse briefNewsResponse = new BriefNewsResponse();
+
+        briefNewsResponse.setUsername(news.getAuthor().getUsername());
+        briefNewsResponse.setId(news.getId());
+        briefNewsResponse.setTitle(news.getTitle());
+        briefNewsResponse.setDescription(news.getDescription());
+        briefNewsResponse.setBody(news.getBody());
+        briefNewsResponse.setCreatedAt(news.getCreatedAt());
+        briefNewsResponse.setUpdatedAt(news.getUpdatedAt());
+        briefNewsResponse.setCommentsCount(news.getComments().size()); // -> добавил
+
+        return briefNewsResponse;
+    }
 
 
 }
