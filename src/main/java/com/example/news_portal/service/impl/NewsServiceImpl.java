@@ -35,8 +35,9 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public News addNews(News news, UUID userId, UUID categoryId) {
-        User author = userService.findById(userId);
+    public News addNews(News news, String userName, UUID categoryId) {
+        User author = userService.findByUsername(userName);
+
         Category category = categoryService.findById(categoryId);
 
         author.addNews(news);
@@ -46,9 +47,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public News updateNews(News news
-            , UUID categoryId
-    ) {
+    public News updateNews(News news, UUID categoryId) {
         if (categoryId != null) {
             Category category = categoryService.findById(categoryId);
             news.setCategory(category);

@@ -39,7 +39,7 @@ public class UserMap {
         }
 
         User user = new User();
-        user.setId(request.getId());
+//        user.setId(request.getId());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());

@@ -5,7 +5,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update   #update   create-drop  create validate
+      ddl-auto: update #update   create-drop  create validate
     show-sql: true
   datasource:
     url: jdbc:postgresql://localhost:5432/news_db

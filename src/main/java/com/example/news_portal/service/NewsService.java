@@ -12,10 +12,9 @@ public interface NewsService {
 
     List<News> findAll(NewsFilter filter);
 
-    News addNews(News news, UUID userId, UUID categoryId);
+    News addNews(News news, String userName, UUID categoryId);
 
-    News updateNews(News news, UUID categoryId
-    );
+    News updateNews(News news, UUID categoryId);
 
     void deleteById(UUID id);
 

@@ -2,23 +2,31 @@ package com.example.news_portal.service.impl;
 
 import com.example.news_portal.dto.request.NewsFilter;
 import com.example.news_portal.exception.EntityNotFoundException;
+import com.example.news_portal.model.Role;
 import com.example.news_portal.model.User;
+import com.example.news_portal.repository.RoleRepository;
 import com.example.news_portal.repository.UserRepository;
 import com.example.news_portal.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    public final RoleRepository roleRepository;
 
 
     @Override
@@ -28,12 +36,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public User save(User user, Role role) {
+
+        user.setRoles(Collections.singletonList(role));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        role.setUser(user);
+        roleRepository.save(role);
+
+
+        return user;
     }
 
     @Override
     public User update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User existedUser = findById(user.getId());
         BeanUtils.copyProperties(user, existedUser);
         return userRepository.save(user);
@@ -41,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(UUID id) {
+        roleRepository.deleteAll(userRepository.findById(id).get().getRoles());
         userRepository.deleteById(id);
     }
 
@@ -59,5 +77,15 @@ public class UserServiceImpl implements UserService {
     public boolean existByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(
+                        MessageFormat.format("User with username {0} not found!", username)
+                )
+        );
+    }
+
 
 }

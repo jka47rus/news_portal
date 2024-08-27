@@ -28,10 +28,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
 
-//	implementation ("org.hibernate.orm:hibernate-platform:6.4.9.Final")
-//	implementation ("org.hibernate.orm:hibernate-core")
-//	implementation ("jakarta.transaction:jakarta.transaction-api")
-
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     compileOnly("org.projectlombok:lombok")

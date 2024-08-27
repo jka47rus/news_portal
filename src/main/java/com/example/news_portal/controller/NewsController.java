@@ -11,6 +11,9 @@ import com.example.news_portal.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -37,24 +40,32 @@ public class NewsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
     public ResponseEntity<NewsListResponse> findAll(NewsFilter filter) {
         return ResponseEntity.ok(newsMapper.newsListToNewsListResponse(newsService.findAll(filter)));
     }
 
-    @PostMapping("/{userId}/{categoryId}")
-    public ResponseEntity<NewsResponse> createNews(@RequestBody NewsRequest request,
-                                                   @PathVariable UUID userId,
-                                                   @PathVariable UUID categoryId) {
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    public ResponseEntity<NewsResponse> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(newsMapper.newsToResponse(newsService.findById(id)));
+    }
 
-        News news = newsService.addNews(newsMapper.fromRequestToNews(request), userId, categoryId);
+    @PostMapping("/{categoryId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    public ResponseEntity<NewsResponse> createNews(@PathVariable UUID categoryId,
+                                                   @AuthenticationPrincipal UserDetails userDetails,
+                                                   @RequestBody NewsRequest request) {
+
+        News news = newsService.addNews(newsMapper.fromRequestToNews(request), userDetails.getUsername(), categoryId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newsMapper.newsToResponse(news));
     }
 
     @PutMapping("/{id}")
     @Loggable
-    public ResponseEntity<NewsResponse> updateNews(@RequestParam UUID userId,
-                                                   @PathVariable UUID id,
+    public ResponseEntity<NewsResponse> updateNews(@PathVariable UUID id,
+                                                   @AuthenticationPrincipal UserDetails userDetails,
                                                    @RequestBody NewsRequest request,
                                                    @RequestParam(required = false) UUID categoryId) {
         News news = newsService.updateNews(newsMapper.requestToNews(id, request), categoryId);
@@ -65,14 +76,12 @@ public class NewsController {
 
     @DeleteMapping("/{id}")
     @Loggable
-    public ResponseEntity<Void> deleteNews(@RequestParam UUID userId, @PathVariable UUID id) {
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    public ResponseEntity<Void> deleteNews(@PathVariable UUID id,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
         newsService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<NewsResponse> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(newsMapper.newsToResponse(newsService.findById(id)));
-    }
 
 }

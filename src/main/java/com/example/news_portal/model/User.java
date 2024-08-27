@@ -2,14 +2,13 @@ package com.example.news_portal.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 @Entity(name = "`user`")
 public class User {
     @Id
@@ -24,11 +23,15 @@ public class User {
     @Column(nullable = false)
     private String password;
     @OneToMany
+    @ToString.Exclude
     private List<Comment> comments = new ArrayList<>();
     @OneToMany
+    @ToString.Exclude
     private List<News> news = new ArrayList<>();
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Role> roles = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comment.setUser(this);

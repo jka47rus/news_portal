@@ -10,6 +10,7 @@ import com.example.news_portal.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,17 +24,27 @@ public class CategoryController {
     private final CategoryMap categoryMapper;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
     public ResponseEntity<CategoryListResponse> findAll(NewsFilter filter) {
         return ResponseEntity.ok(categoryMapper.categoryListToCategoryListResponse(categoryService.findAll(filter)));
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    public ResponseEntity<CategoryResponse> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(categoryMapper.categoryToResponse(categoryService.findById(id)));
+    }
+
+
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         Category category = categoryService.save(categoryMapper.fromRequestToCategory(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryMapper.categoryToResponse(category));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest request,
                                                            @PathVariable UUID id) {
         Category category = categoryService.updateCategory(categoryMapper.requestToCategory(id, request));
@@ -41,14 +52,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         categoryService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(categoryMapper.categoryToResponse(categoryService.findById(id)));
     }
 
 

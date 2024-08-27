@@ -30,8 +30,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment addComment(Comment comment, UUID userId, UUID newsId) {
-        User author = userService.findById(userId);
+    public Comment addComment(Comment comment, String username, UUID newsId) {
+        User author = userService.findByUsername(username);
         News news = newsService.findById(newsId);
         author.addComment(comment);
         news.addComment(comment);

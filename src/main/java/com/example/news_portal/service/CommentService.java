@@ -9,7 +9,7 @@ public interface CommentService {
 
     List<Comment> findAll();
 
-    Comment addComment(Comment comment, UUID userId, UUID newsId);
+    Comment addComment(Comment comment, String username, UUID newsId);
 
     Comment updateComment(Comment comment);
 
